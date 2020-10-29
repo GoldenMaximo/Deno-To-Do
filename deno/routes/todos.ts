@@ -9,8 +9,8 @@ interface Todo {
 
 let todos: Array<Todo> = [];
 
-router.get('/todos', (ctx) => {
-    ctx.response.body = { todos }
+router.get('/todos', ctx => {
+    ctx.response.body = { todos };
 });
 
 router.post('/todo', async (ctx) => {
