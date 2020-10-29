@@ -12,4 +12,4 @@ app.use(async (ctx, next) => {
 app.use(todosRoutes.routes());
 app.use(todosRoutes.allowedMethods());
 
-await app.listen({ port: 3000 });
+await app.listen({ port: 8000 });
