@@ -9,7 +9,7 @@ const Todos = () => {
 
   const getTodos = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3000/todos');
+      const response = await fetch('http://localhost:8000/todos');
       const todosData = await response.json();
       setTodos(todosData.todos);
     } catch (err) {
@@ -33,7 +33,7 @@ const Todos = () => {
   };
 
   const deleteTodoHandler = async (todoId) => {
-    const response = await fetch('http://localhost:3000/todos/' + todoId, {
+    const response = await fetch('http://localhost:8000/todo/' + todoId, {
       method: 'DELETE',
     });
     const data = await response.json();
@@ -50,7 +50,7 @@ const Todos = () => {
     event.preventDefault();
     setEditedTodo(null);
     setEnteredText('');
-    let url = 'http://localhost:3000/todos';
+    let url = 'http://localhost:8000/todo';
     let method = 'POST';
     if (editedTodo) {
       url = url + '/' + editedTodo.id;
