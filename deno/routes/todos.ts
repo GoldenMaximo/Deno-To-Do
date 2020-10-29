@@ -17,8 +17,6 @@ interface TodoSchema {
     text: string;
 }
 
-let todos: Array<Todo> = [];
-
 router.get('/todos', async ctx => {
     const todos = await getDb().collection<TodoSchema>('todos').find();
     const formattedTodos = todos.map((todo: { _id: ObjectId, text: string }) => {
@@ -47,29 +45,42 @@ router.post('/todo', async (ctx) => {
         console.log(err);
     }
 
-    todos.push(newTodo);
-
     ctx.response.body = { message: 'Todo created', todo: newTodo };
 });
 
 router.put('/todo/:id', async (ctx) => {
-    const tid = ctx.params.id;
+    const tid = ctx.params.id!;
     const data = await ctx.request.body().value;
     const text = data.text;
 
-    const todoIndex = todos.findIndex(e => e.id === tid);
-
-    todos[todoIndex] = { id: todos[todoIndex].id, text };
+    try {
+     await getDb()
+            .collection<TodoSchema>('todos')
+            .updateOne(
+                { _id: ObjectId(tid) },
+                { $set: { text } }
+            );
+    } catch (err) {
+        console.log(err);
+    }
 
     ctx.response.body = { messsage: 'Updated todo' };
 });
 
 router.delete('/todo/:id', async (ctx) => {
-    const tid = ctx.params.id;
+    const tid = ctx.params.id!;
 
-    todos = todos.filter(e => e.id !== tid);
+    try {
+        await getDb()
+               .collection<TodoSchema>('todos')
+               .deleteOne(
+                   { _id: ObjectId(tid) }
+               );
+       } catch (err) {
+           console.log(err);
+       }
 
-    ctx.response.body = { messsage: 'Updated todo', todos };
+    ctx.response.body = { messsage: 'Deleted todo' };
 });
 
 export default router;
